@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">MovieApp</string>
+    <string name="menu_popular">Most Popular</string>
+    <string name="menu_top_rated">Top Rated</string>
+    <string name="already_selected">already selected!</string>
+    <string name="cd_moviePoster">Poster</string>
+</resources>
