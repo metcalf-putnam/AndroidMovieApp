@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.squareup.picasso.Picasso;
 
@@ -59,8 +60,19 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Poster
             itemView.setOnClickListener(this);
         }
         public void bind(Movie movie){
+            final ProgressBar progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar);
             String url = movie.getPosterPath();
-            Picasso.with(movieItemImageView.getContext()).load(url).into(movieItemImageView);
+            Picasso.with(movieItemImageView.getContext()).load(url)
+                    .error(R.drawable.ic_error)
+                    .into(movieItemImageView, new com.squareup.picasso.Callback() {
+                        @Override
+                        public void onError() {}
+
+                        @Override
+                        public void onSuccess() {
+                            progressBar.setVisibility(View.INVISIBLE);
+                        }
+                    });
         }
 
         @Override
@@ -74,16 +86,25 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Poster
     public int setMovieData(ArrayList<Movie> movies){
         if(mMoviesArray == null){
             mMoviesArray = movies;
+            notifyItemRangeInserted(0, movies.size());
         }
         else {
+            int currentSize = mMoviesArray.size();
             mMoviesArray.addAll(movies);
+            notifyItemRangeInserted(currentSize, movies.size());
         }
-        notifyDataSetChanged();
         return mMoviesArray.size();
     }
 
     public void clearMovieData(){
-        mMoviesArray.clear();
+        if (mMoviesArray != null) {
+            int currentSize = mMoviesArray.size();
+            mMoviesArray.clear();
+            notifyItemRangeRemoved(0, currentSize);
+        }
+    }
+    public ArrayList<Movie> getMoviesArray(){
+        return mMoviesArray;
     }
 
 }

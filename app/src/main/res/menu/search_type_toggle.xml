@@ -10,8 +10,13 @@
         android:title="@string/menu_popular" />
     <item
         android:id="@+id/menu_top_rated"
-        android:orderInCategory="1"
+        android:orderInCategory="2"
         app:showAsAction="ifRoom"
         android:title="@string/menu_top_rated" />
+    <item
+        android:id="@+id/menu_favorites"
+        android:orderInCategory="3"
+        app:showAsAction="ifRoom"
+        android:title="My Favorites" />
 
 </menu>

@@ -131,7 +131,7 @@ public class Movie implements Parcelable {
         return mOverview;
     }
     public String getReleaseDate(){
-        return mReleaseDate;
+        return mReleaseDate.substring(0, 4); //returning just the year
     }
     public String toString (){
 
