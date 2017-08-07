@@ -4,4 +4,24 @@
     <string name="menu_top_rated">Top Rated</string>
     <string name="already_selected">already selected!</string>
     <string name="cd_moviePoster">Poster</string>
+    <string name="error_no_internet">Error: Check Internet Connection</string>
+    <string name="error_no_response">Error: Could not get response from server.
+    Check to ensure valid API key is present</string>
+
+    <string name="review_item">\"%1$s\"</string>
+    <string name="no_reviews">no reviews yet!</string>
+    <string name="no_videos">no trailers available :(</string>
+    <string name="detail_average_user_rating">"%1$s/10"</string>
+
+    <string name="add_to_favorites">favorite</string>
+    <string name="in_favorites">in favorites</string>
+    <string name="play_trailer">play trailer</string>
+    <string name="overview_label">Overview</string>
+
+    <string name="mockup_release_date">2001</string>
+    <string name="mockup_original_title">千と千尋の神隠し</string>
+    <string name="mockup_user_rating">8.2/10</string>
+    <string name="mockup_overview">A ten year old girl who wanders away from her parents along a path that leads to a world ruled by strange and unusual monster-like animals.
+        Her parents have been changed into pigs along with others inside a bathhouse full of these creatures. Will she ever see the world how it once was?</string>
+    <string name="mockup_reviews">\"Genuinely one of my favorite movies of all time. Watched again recently and realised how well written, brilliantly shot, beautifully cast and cleverly produced this movie actually is!\"</string>
 </resources>

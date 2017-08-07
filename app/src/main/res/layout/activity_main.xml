@@ -8,4 +8,13 @@
         android:id="@+id/rv_movies"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+    <TextView
+        android:id="@+id/tv_error"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/error_no_internet"
+        android:background="@color/colorAccent"
+        android:visibility="invisible"
+        android:gravity="center_horizontal"/>
+
 </merge>
