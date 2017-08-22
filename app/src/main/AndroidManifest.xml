@@ -21,4 +21,8 @@
         <activity android:name=".MovieDetail"
             android:parentActivityName=".MainActivity"/>
     </application>
+    <provider
+        android:name="com$example$android$AndroidMovieApp$data$TaskContentProvider"
+        android:authorities="com.example.android.AndroidMovieApp"
+        android:exported="false"/>
 </manifest>
