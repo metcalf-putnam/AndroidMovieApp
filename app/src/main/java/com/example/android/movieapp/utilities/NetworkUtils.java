@@ -22,7 +22,7 @@ import java.util.Scanner;
  */
 
 public class NetworkUtils {
-    private static final String MY_API_KEY = "065ca3ba1f9409b5e13ca4d0e3cf228e";
+    private static final String MY_API_KEY = "insert api key here";
 
     private static final String BASE_MOVIE_SEARCH_URL = "api.themoviedb.org";
     private static final String AUTH_TYPE = "3";
