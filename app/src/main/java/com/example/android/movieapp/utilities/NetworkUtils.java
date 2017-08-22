@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.Scanner;
 
@@ -21,7 +22,7 @@ import java.util.Scanner;
  */
 
 public class NetworkUtils {
-    private static final String MY_API_KEY = "boogiepuppeh";
+    private static final String MY_API_KEY = "065ca3ba1f9409b5e13ca4d0e3cf228e";
 
     private static final String BASE_MOVIE_SEARCH_URL = "api.themoviedb.org";
     private static final String AUTH_TYPE = "3";
@@ -38,6 +39,8 @@ public class NetworkUtils {
 
     private static final String BASE_MOVIE_POSTER_URL = "http://image.tmdb.org/t/p/";
     private static final String POSTER_SIZE = "w185/";
+
+    private static final String YOUTUBE_BASE_URL = "https://www.youtube.com/watch?v=";
 
     public static String getMostPopularMoviesSearch(){
         return MOST_POPULAR_MOVIES_SEARCH;
@@ -149,5 +152,8 @@ public class NetworkUtils {
 
     public static String getFullPosterPath(String posterPath){
         return BASE_MOVIE_POSTER_URL + POSTER_SIZE + posterPath;
+    }
+    public static String getFullYouTubePath(String trailerPath){
+        return YOUTUBE_BASE_URL + trailerPath;
     }
 }

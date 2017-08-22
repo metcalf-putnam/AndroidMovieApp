@@ -16,7 +16,8 @@
         android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/tv_releaseDate"
         android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="@+id/tv_releaseDate" />
+        app:layout_constraintLeft_toLeftOf="@+id/tv_releaseDate"
+        android:layout_marginStart="8dp" />
 
     <TextView
         android:id="@+id/tv_releaseDate"
@@ -28,17 +29,19 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="16dp"
         android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="8dp" />
 
     <ImageView
         android:id="@+id/iv_favorite_star"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@android:drawable/btn_star_big_off"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/iv_play_trailer"
+        android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="@+id/tv_releaseDate" />
+        app:layout_constraintLeft_toLeftOf="@+id/tv_releaseDate"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_trailer" />
 
     <TextView
         android:id="@+id/tv_favorite_text"
@@ -50,7 +53,8 @@
         app:layout_constraintTop_toTopOf="@+id/iv_favorite_star"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/iv_favorite_star"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp" />
 
     <ImageView
         android:id="@+id/iv_play_trailer"
@@ -58,20 +62,31 @@
         android:layout_height="wrap_content"
         app:srcCompat="@android:drawable/ic_media_play"
         android:background="@color/colorPrimary"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintTop_toBottomOf="@+id/tv_userRating"
         android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/tv_releaseDate"
+        android:layout_marginStart="8dp" />
+
+    <Spinner
+        android:id="@+id/spinner_trailer"
+        android:layout_width="0dp"
+        android:spinnerMode="dropdown"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/iv_play_trailer"
+        android:layout_marginLeft="0dp"
         app:layout_constraintLeft_toLeftOf="@+id/tv_releaseDate" />
 
     <TextView
-        android:id="@+id/tv_trailer"
+        android:id="@+id/tv_play_trailer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/play_trailer"
         app:layout_constraintLeft_toRightOf="@+id/iv_play_trailer"
         android:layout_marginLeft="8dp"
         app:layout_constraintTop_toTopOf="@+id/iv_play_trailer"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/iv_play_trailer"
         android:layout_marginBottom="8dp" />
 
