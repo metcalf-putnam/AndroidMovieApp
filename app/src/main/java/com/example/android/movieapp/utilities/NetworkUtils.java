@@ -17,12 +17,14 @@ import java.net.URI;
 import java.net.URL;
 import java.util.Scanner;
 
+import static java.security.AccessController.getContext;
+
 /**
  * @author Patrice Metcalf-Putnam
  */
 
 public class NetworkUtils {
-    private static final String MY_API_KEY = "insert api key here";
+    private static final String MY_API_KEY = ApiKey.getApi();
 
     private static final String BASE_MOVIE_SEARCH_URL = "api.themoviedb.org";
     private static final String AUTH_TYPE = "3";
