@@ -128,11 +128,7 @@ public class MainActivity extends AppCompatActivity
                 movieArray = new ArrayList<>();
                 URL url = NetworkUtils.buildBaseSortURL(searchInfo, mPageResults);
                 String jsonData;
-                /*input what to do if favorites here:
-                Query database
-                make database results into Movie objects
-                movieArray = movies objects from database
-                */
+                
                 if(FAVORITES_CONSTANT.contentEquals(mPreferredSearch)){
                     try{
                         Cursor cursor =
