@@ -10,7 +10,6 @@ import java.util.HashMap;
  */
 
 public class Movie implements Parcelable {
-
     private String mId;
     private String mTitle;
     private String mVoteAverage;
@@ -108,6 +107,9 @@ public class Movie implements Parcelable {
     }
     public String getVoteAverage(){
         return mVoteAverage;
+    }
+    public String getBasePosterPath(){
+        return mPosterPath;
     }
     public String getPosterPath(){
         return NetworkUtils.getFullPosterPath(mPosterPath); //adds base url

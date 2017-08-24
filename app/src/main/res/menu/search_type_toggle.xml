@@ -17,6 +17,6 @@
         android:id="@+id/menu_favorites"
         android:orderInCategory="3"
         app:showAsAction="ifRoom"
-        android:title="My Favorites" />
+        android:title="@string/menu_my_favorites" />
 
 </menu>

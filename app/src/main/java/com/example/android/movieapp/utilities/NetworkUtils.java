@@ -4,20 +4,14 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.widget.TextView;
-
-import com.example.android.movieapp.MainActivity;
-import com.example.android.movieapp.R;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 import java.util.Scanner;
 
-import static java.security.AccessController.getContext;
 
 /**
  * @author Patrice Metcalf-Putnam
@@ -51,7 +45,7 @@ public class NetworkUtils {
 
     public static String getReviews(String movieId){
         URL reviewUrl = buildDetailedMovieSearchUrl(movieId, REVIEWS_SEARCH);
-        String reviews = null;
+        String reviews;
         try {
             reviews = getResponseFromHttpUrl(reviewUrl);
         }catch (IOException e) {
@@ -63,7 +57,7 @@ public class NetworkUtils {
 
     public static String getTrailers(String movieId){
         URL trailerUrl = buildDetailedMovieSearchUrl(movieId, TRAILERS_SEARCH);
-        String trailers = null;
+        String trailers;
         try{
             trailers = getResponseFromHttpUrl(trailerUrl);
         }catch(IOException e){
@@ -107,7 +101,7 @@ public class NetworkUtils {
     private static URL makeUrlFromString(String builder){
         URL url = null;
         try{
-            url = new URL(builder.toString());
+            url = new URL(builder);
         }
         catch (MalformedURLException e){
             e.printStackTrace();
