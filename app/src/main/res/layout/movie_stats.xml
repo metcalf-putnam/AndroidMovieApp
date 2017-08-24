@@ -10,7 +10,6 @@
         android:id="@+id/tv_userRating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
         tools:text="@string/mockup_user_rating"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
         android:layout_marginTop="8dp"
@@ -23,7 +22,6 @@
         android:id="@+id/tv_releaseDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         tools:text="@string/mockup_release_date"
         app:layout_constraintTop_toTopOf="parent"
@@ -34,6 +32,7 @@
 
     <ImageView
         android:id="@+id/iv_favorite_star"
+        android:contentDescription="@string/favorite_star_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@android:drawable/btn_star_big_off"
@@ -61,6 +60,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@android:drawable/ic_media_play"
+        android:contentDescription="@string/play_trailer_description"
         android:background="@color/colorPrimary"
         android:layout_marginTop="24dp"
         app:layout_constraintTop_toBottomOf="@+id/tv_userRating"
@@ -76,6 +76,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/iv_play_trailer"
         android:layout_marginLeft="0dp"
+        android:layout_marginStart="0dp"
         app:layout_constraintLeft_toLeftOf="@+id/tv_releaseDate" />
 
     <TextView
@@ -85,6 +86,7 @@
         android:text="@string/play_trailer"
         app:layout_constraintLeft_toRightOf="@+id/iv_play_trailer"
         android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
         app:layout_constraintTop_toTopOf="@+id/iv_play_trailer"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/iv_play_trailer"

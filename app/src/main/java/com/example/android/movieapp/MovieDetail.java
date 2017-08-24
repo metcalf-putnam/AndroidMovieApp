@@ -1,7 +1,10 @@
 package com.example.android.movieapp;
 
-import android.content.Context;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -9,31 +12,23 @@ import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.movieapp.data.FavoritesContract;
 import com.example.android.movieapp.utilities.NetworkUtils;
 import com.example.android.movieapp.utilities.ParseMovieReviewsUtil;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import static android.R.drawable.btn_star_big_off;
+import static android.R.drawable.btn_star_big_on;
 
 /**
  * @author Patrice Metcalf-Putnam
@@ -42,15 +37,20 @@ import butterknife.ButterKnife;
 public class MovieDetail extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<HashMap<String, String>>,
                     View.OnClickListener {
+    private static final String LOG_TAG = "Android Movie App";
     private static final String MOVIE_EXTRA = "movie";
     private static final String ID_EXTRA = "id";
     private static final String REVIEWS_EXTRA = "reviews";
     private static final String TRAILERS_EXTRA = "trailers";
     private static final String TRAILER_EXTRA = "TRAILER";
     private static final String NAME_EXTRA = "NAME";
+    private static final String FAVORITE_EXTRA = "FAVORITE";
     private static final int MOVIE_LOADER = 20;
-    private static ArrayList<String> mTrailers = new ArrayList<String>();
-    private static ArrayList<String> mTrailerNames = new ArrayList<String>();
+    private static boolean mFavorite = false; //need change to have this check if is in database first thing
+    private static Movie mMovie;
+    private static ArrayList<String> mTrailers = new ArrayList<>();
+    private static ArrayList<String> mTrailerNames = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,9 +84,19 @@ public class MovieDetail extends AppCompatActivity
                         .into(poster);
 
                 ImageView playTrailer = (ImageView) findViewById(R.id.iv_play_trailer);
+                TextView trailerText = (TextView) findViewById(R.id.tv_play_trailer);
+                ImageView favoriteStar = (ImageView) findViewById(R.id.iv_favorite_star);
+                TextView favoriteText = (TextView) findViewById(R.id.tv_favorite_text);
+
                 playTrailer.setOnClickListener(this);
+                trailerText.setOnClickListener(this);
+                favoriteStar.setOnClickListener(this);
+                favoriteText.setOnClickListener(this);
+
 
                 String movieId = m.getId();
+
+                mMovie = m;
                 callLoader(movieId);
 
             }
@@ -127,7 +137,7 @@ public class MovieDetail extends AppCompatActivity
                 if(movieId == null || TextUtils.isEmpty(movieId)){
                     return null;
                 }
-                HashMap<String, String> hash = new HashMap();
+                HashMap hash = new HashMap();
 
                 String trailers = NetworkUtils.getTrailers(movieId);
                 hash.put(TRAILERS_EXTRA, trailers);
@@ -135,6 +145,8 @@ public class MovieDetail extends AppCompatActivity
                 String movieReviews = NetworkUtils.getReviews(movieId);
                 hash.put(REVIEWS_EXTRA, movieReviews);
 
+                String favorite = isInFavorites(movieId);
+                hash.put(FAVORITE_EXTRA, favorite);
 
                 return hash;
 
@@ -148,6 +160,12 @@ public class MovieDetail extends AppCompatActivity
         mTrailerNames.clear();
         mTrailers.clear();
         if(movieDetails != null){
+            String favorite = movieDetails.get(FAVORITE_EXTRA);
+            if(favorite.equals("1")){
+                updateFavoritesUI(true);
+            }else{
+                updateFavoritesUI(false);
+            }
             String reviews = movieDetails.get(REVIEWS_EXTRA);
             if(reviews == null || TextUtils.isEmpty(reviews)){
                 reviewsTV.setText(R.string.no_reviews);
@@ -188,7 +206,7 @@ public class MovieDetail extends AppCompatActivity
     private void addSpinnerOptions(){
         Spinner spinner = (Spinner) findViewById(R.id.spinner_trailer);
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, mTrailerNames);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
@@ -196,7 +214,7 @@ public class MovieDetail extends AppCompatActivity
 
     //modified from example code
     // here: https://developer.android.com/guide/components/intents-common.html#Music
-    public void playMedia(Uri http) {
+    private void playMedia(Uri http) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(http);
         if (intent.resolveActivity(getPackageManager()) != null) {
@@ -209,7 +227,7 @@ public class MovieDetail extends AppCompatActivity
     public void onClick(View v) {
         int id = v.getId();
         switch (id){
-            case R.id.iv_play_trailer:case R.id.tv_play_trailer:
+            case R.id.iv_play_trailer: case R.id.tv_play_trailer:
                 if(!mTrailers.isEmpty()){
                     Spinner spinner = (Spinner) findViewById(R.id.spinner_trailer);
                     int spinnerPosition = spinner.getSelectedItemPosition();
@@ -218,7 +236,84 @@ public class MovieDetail extends AppCompatActivity
                     playMedia(trailerUri);
                 }
                 break;
+            case R.id.iv_favorite_star:case R.id.tv_favorite_text:
+                if(mMovie != null){
+                    if(mFavorite){
+                        //remove from database
+                        Uri uri = ContentUris.withAppendedId(FavoritesContract.FavoritesEntry.CONTENT_URI,
+                                Integer.parseInt(mMovie.getId()));
+                        getContentResolver().delete(uri, null, null);
+                        updateFavoritesUI(false);
+                        Toast.makeText(getBaseContext(), R.string.removed_from_favorites, Toast.LENGTH_SHORT).show();
+
+                    }else{
+                        //add to database
+                        Uri uri = addMovie();
+                        if(uri != null){
+                            //success
+                            Toast.makeText(getBaseContext(), R.string.added_to_favorites, Toast.LENGTH_SHORT).show();
+                            updateFavoritesUI(true);
+                        }
+                    }
+
+                }else{
+                    throw new UnsupportedOperationException("Cannot add null movie to database");
+                }
+                break;
         }
 
+    }
+    private Uri addMovie(){
+        String movieId = mMovie.getId();
+        String movieTitle = mMovie.getTitle();
+        String posterPath = mMovie.getBasePosterPath();
+        String releaseDate = mMovie.getReleaseDate();
+        String originalTitle = mMovie.getOriginalTitle();
+        String overview = mMovie.getOverview();
+        String voteAverage = mMovie.getVoteAverage();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(FavoritesContract.FavoritesEntry.COLUMN_MOVIE_ID, movieId);
+        contentValues.put(FavoritesContract.FavoritesEntry.COLUMN_TITLE, movieTitle);
+        contentValues.put(FavoritesContract.FavoritesEntry.COLUMN_POSTER_PATH, posterPath);
+        contentValues.put(FavoritesContract.FavoritesEntry.COLUMN_RELEASE_DATE, releaseDate);
+        contentValues.put(FavoritesContract.FavoritesEntry.COLUMN_ORIGINAL_TITLE, originalTitle);
+        contentValues.put(FavoritesContract.FavoritesEntry.COLUMN_OVERVIEW, overview);
+        contentValues.put(FavoritesContract.FavoritesEntry.COLUMN_VOTE_AVERAGE, voteAverage);
+
+        return getContentResolver().insert(FavoritesContract.FavoritesEntry.CONTENT_URI, contentValues);
+    }
+    private String isInFavorites(String movieId){
+        Uri uri = ContentUris.withAppendedId(FavoritesContract.FavoritesEntry.CONTENT_URI,
+                Integer.parseInt(mMovie.getId()));
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        int results = cursor.getCount();
+        cursor.close();
+        switch (results){
+            case 1:
+                //expected if in database
+                return "1";
+            case 0:
+                //not in favorites
+                return "0";
+            default:
+                throw new UnsupportedOperationException("received " + results
+                        + " cases of movie ID " + movieId + " in database");
+        }
+    }
+    private void updateFavoritesUI(Boolean inFavorites){
+        TextView favoriteText = (TextView) findViewById(R.id.tv_favorite_text);
+        ImageView favoriteStar = (ImageView) findViewById(R.id.iv_favorite_star);
+        Drawable starON = getResources().getDrawable(btn_star_big_on);
+        Drawable starOFF = getResources().getDrawable(btn_star_big_off);
+        if(inFavorites){
+            favoriteText.setText(R.string.in_favorites);
+            mFavorite = true;
+            favoriteStar.setImageDrawable(starON);
+        }else{
+            favoriteText.setText(R.string.add_to_favorites);
+            mFavorite = false;
+            favoriteStar.setImageDrawable(starOFF);
+        }
     }
 }

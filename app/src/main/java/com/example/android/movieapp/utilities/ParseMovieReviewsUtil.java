@@ -4,13 +4,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Created by fluffster on 8/6/2017.
+ * @author Patrice Metcalf-Putnam on 8/6/2017.
  */
 
 public class ParseMovieReviewsUtil {

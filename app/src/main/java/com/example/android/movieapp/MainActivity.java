@@ -2,6 +2,7 @@ package com.example.android.movieapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -10,14 +11,16 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.android.movieapp.data.FavoritesContract;
 import com.example.android.movieapp.data.MoviePreferences;
 import com.example.android.movieapp.utilities.NetworkUtils;
+import com.example.android.movieapp.utilities.ParseMovieCursorUtils;
 import com.example.android.movieapp.utilities.ParseMovieJsonUtils;
 import org.json.JSONException;
 import java.io.IOException;
@@ -28,7 +31,7 @@ public class MainActivity extends AppCompatActivity
         implements RecyclerAdapter.MoviePosterClickListener, LoaderManager.LoaderCallbacks<ArrayList<Movie>>{
     private int mMovieListSize = 0;
     private RecyclerAdapter mAdapter;
-    private String mPreferredSearch;
+    private String mPreferredSearch = MoviePreferences.getPreferred();
     private int mPageResults = 1;
     private static final int MOVIE_DB_SEARCH_LOADER = 15;
     private static final String SEARCH_EXTRA = "searchExtra";
@@ -36,6 +39,8 @@ public class MainActivity extends AppCompatActivity
     private static final String MOVIE_LIST_SIZE_EXTRA = "listSize";
     private static final String MOVIE_RESULTS_EXTRA = "movieList";
     private static final String PREFERRED_SEARCH_EXTRA = "preferred";
+    private static final String FAVORITES_CONSTANT = "favorites";
+    private static final String TAG = "Android Movie App";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +74,7 @@ public class MainActivity extends AppCompatActivity
                     GridLayoutManager gridLayout = (GridLayoutManager) recyclerView.getLayoutManager();
                     int lastPosition = gridLayout.findLastVisibleItemPosition() + 5;
                     if (mMovieListSize != 0) {
-                        if (lastPosition >= mMovieListSize) {
+                        if (lastPosition >= mMovieListSize && !FAVORITES_CONSTANT.contentEquals(mPreferredSearch)) {
                             callLoader();
                         }
                     }
@@ -123,7 +128,30 @@ public class MainActivity extends AppCompatActivity
                 movieArray = new ArrayList<>();
                 URL url = NetworkUtils.buildBaseSortURL(searchInfo, mPageResults);
                 String jsonData;
-                if(NetworkUtils.isNetworkAvailable(MainActivity.this)) {
+                /*input what to do if favorites here:
+                Query database
+                make database results into Movie objects
+                movieArray = movies objects from database
+                */
+                if(FAVORITES_CONSTANT.contentEquals(mPreferredSearch)){
+                    try{
+                        Cursor cursor =
+                        getContentResolver().query(FavoritesContract.FavoritesEntry.CONTENT_URI,
+                                null, null, null, FavoritesContract.FavoritesEntry.COLUMN_TITLE);
+                        movieArray = ParseMovieCursorUtils.generateMovieArray(cursor);
+                        if(cursor != null){
+                            cursor.close();
+                        }
+                        resetSearch();
+                        return movieArray;
+                    }catch(Exception e){
+                        Log.e(TAG, "Failed to load from database");
+                        e.printStackTrace();
+                        return null;
+                    }
+
+                }
+                else if(NetworkUtils.isNetworkAvailable(MainActivity.this)) {
                     try {
                         jsonData = NetworkUtils.getResponseFromHttpUrl(url);
 
@@ -185,6 +213,7 @@ public class MainActivity extends AppCompatActivity
                 mPreferredSearch = topRated;
                 break;
             case R.id.menu_favorites: //need to update this
+                mPreferredSearch = FAVORITES_CONSTANT;
                 break;
         }
         if(checkConnection()){

@@ -11,6 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="0dp"
+        android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
         android:text="@string/overview_label"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Widget.ActionBar.Subtitle"
@@ -35,8 +36,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="0dp"
+        android:layout_marginStart="0dp"
         android:layout_marginTop="8dp"
-        android:text="Reviews"
+        android:text="@string/reviews_label"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Widget.ActionBar.Subtitle"
         app:layout_constraintLeft_toLeftOf="@+id/tv_overviewLabel"
         app:layout_constraintTop_toBottomOf="@+id/tv_overview" />

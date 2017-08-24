@@ -20,9 +20,10 @@
         </activity>
         <activity android:name=".MovieDetail"
             android:parentActivityName=".MainActivity"/>
-    </application>
     <provider
-        android:name="com$example$android$AndroidMovieApp$data$TaskContentProvider"
+        android:name="com.example.android.movieapp.data.FavoritesContentProvider"
         android:authorities="com.example.android.AndroidMovieApp"
         android:exported="false"/>
+    </application>
+
 </manifest>

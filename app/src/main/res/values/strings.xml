@@ -2,7 +2,7 @@
     <string name="app_name">MovieApp</string>
     <string name="menu_popular">Most Popular</string>
     <string name="menu_top_rated">Top Rated</string>
-    <string name="already_selected">already selected!</string>
+    <string name="menu_my_favorites">My Favorites</string>
     <string name="cd_moviePoster">Poster</string>
     <string name="error_no_internet">Error: Check Internet Connection</string>
     <string name="error_no_response">Error: Could not get response from server.
@@ -11,13 +11,15 @@
     <string name="review_item">\"%1$s\"</string>
     <string name="no_reviews">no reviews yet!</string>
     <string name="review_error">error loading reviews!</string>
-    <string name="no_videos">no trailers available :(</string>
     <string name="detail_average_user_rating">"%1$s/10"</string>
 
     <string name="add_to_favorites">favorite</string>
     <string name="in_favorites">in favorites</string>
     <string name="play_trailer">play trailer</string>
     <string name="overview_label">Overview</string>
+    <string name="reviews_label">Reviews</string>
+    <string name="added_to_favorites">added to favorites!</string>
+    <string name="removed_from_favorites">removed from favorites</string>
 
     <string name="mockup_release_date">2001</string>
     <string name="mockup_original_title">千と千尋の神隠し</string>
@@ -26,4 +28,7 @@
         Her parents have been changed into pigs along with others inside a bathhouse full of these creatures. Will she ever see the world how it once was?</string>
     <string name="mockup_reviews">\"Genuinely one of my favorite movies of all time. Watched again recently and realised how well written, brilliantly shot,
         beautifully cast and cleverly produced this movie actually is!\"</string>
+
+    <string name="favorite_star_description">favorite star</string>
+    <string name="play_trailer_description">play trailer image</string>
 </resources>
